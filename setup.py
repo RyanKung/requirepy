@@ -2,11 +2,12 @@
 import sys
 from setuptools import setup, find_packages
 import os
+import codecs
+import re
 
-current_path = os.path.dirname(os.path.abspath(__file__))
+here = os.path.dirname(os.path.abspath(__file__))
 
-requirement_file = os.path.join(current_path, 'requirements.txt')
-version_file = os.path.join(current_path, 'VERSION')
+requirement_file = os.path.join(here, 'requirements.txt')
 
 if sys.version_info[:2] < (3, 5) and sys.argv[-1] == 'install':
     sys.exit('stack requires python 3.5 or higher')
@@ -14,13 +15,25 @@ if sys.version_info[:2] < (3, 5) and sys.argv[-1] == 'install':
 with open(requirement_file, 'r') as f:
     requires = [x.strip() for x in f if x.strip()]
 
-with open(version_file, 'r') as f:
-    version = f.read()
+
+def read(*parts):
+    # intentionally *not* adding an encoding option to open, See:
+    #   https://github.com/pypa/virtualenv/issues/201#issuecomment-3145690
+    return codecs.open(os.path.join(here, *parts), 'r').read()
+
+
+def find_version(*file_paths):
+    version_file = read(*file_paths)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+                              version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
 
 
 setup(
     name='stack-require',
-    version=version,
+    version=find_version('require', '__init__.py'),
     url='http://python-stack.readthedocs.io',
     description='`require` is a part of `stack` project',
     author='Ryan Kung',
