@@ -17,9 +17,6 @@ with open(requirement_file, 'r') as f:
 with open(version_file, 'r') as f:
     version = f.read()
 
-with open(os.path.join(current_path, 'README.rst'), 'r') as f:
-    readme = f.read()
-
 
 setup(
     name='stack-require',
@@ -30,7 +27,6 @@ setup(
     py_modules=find_packages(exclude=['tests']),
     author_email='ryankung@ieee.org',
     license='MIT',
-    long_description=readme,
     packages=find_packages(exclude=['tests', 'docs']),
     package_dir={'': '.'},
     tests_require=['nose'],
