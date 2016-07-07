@@ -6,7 +6,7 @@ import runpy
 
 __all__ = ['exec_code', '__version__']
 
-__version__ = '0.0.1b2'
+__version__ = '0.0.1b3'
 
 
 def exec_code(code: str):
